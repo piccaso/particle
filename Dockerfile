@@ -1,20 +1,33 @@
-FROM node:8-alpine AS build
-RUN apk add --no-cache php7 php7-phar php7-iconv php7-mbstring php7-openssl php7-json php7-ctype git zip curl ca-certificates openssl python2 python2-dev build-base
-RUN curl --silent --show-error https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
-# 'phantomjs-prebuilt' won't work on plain alpine! See https://github.com/dustinblackman/phantomized
-RUN wget -qO- "https://github.com/dustinblackman/phantomized/releases/download/2.1.1/dockerized-phantomjs.tar.gz" | tar xzv -C /
+FROM ubuntu:artful
+
+## dependencies
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install --force-yes -y -o Dpkg::Options::="--force-confnew" \
+    php7.1 php7.1-cli php7.1-mbstring php7.1-json python ca-certificates openssl build-essential \
+    curl wget zip git apt-transport-https lsb-release sudo libfontconfig bzip2 && \
+    curl -sL https://deb.nodesource.com/setup_8.x | bash - && sudo apt-get install -y nodejs && \
+    curl --silent --show-error https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
+
+## warm up npm and composer
 ADD ./package.json /src/
 ADD ./apps/pl/pattern-lab/composer.* /src/apps/pl/pattern-lab/
 WORKDIR /src
-RUN npm --no-color install && npm --no-color run setup
-ADD . /src
+RUN npm --no-color install && COMPOSER_NO_INTERACTION=1 npm --no-color run setup
 
-# RUN npm --no-color test
-# RUN npm --no-color start compile:pl
+## test 'n build just for shits 'n giggles
+ADD . /src
+RUN npm --no-color test && npm --no-color run compile:pl
 CMD npm --no-color start
 EXPOSE 8080
 
-## TODO build static styleguide
-# FROM nginx:alpine
-# COPY --from=build /src/dist/ /usr/share/nginx/html
-# EXPOSE 80
+## badge
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+LABEL org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.name="particle" \
+    org.label-schema.url="https://hub.docker.com/r/0xff/particle/" \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.vcs-url="https://github.com/piccaso/particle" \
+    org.label-schema.schema-version="1.0"
