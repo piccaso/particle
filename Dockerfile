@@ -10,7 +10,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/*
 
 ## warm up npm and composer
-ADD ./package.json /src/
+ADD ./package.json ./package-lock.json /src/
 ADD ./apps/pl/pattern-lab/composer.* /src/apps/pl/pattern-lab/
 WORKDIR /src
 RUN npm --no-color install && COMPOSER_NO_INTERACTION=1 npm --no-color run setup
@@ -30,4 +30,5 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.url="https://hub.docker.com/r/0xff/particle/" \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.vcs-url="https://github.com/piccaso/particle" \
+    org.label-schema.version=$VCS_REF \
     org.label-schema.schema-version="1.0"
