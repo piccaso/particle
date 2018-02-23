@@ -3,7 +3,7 @@ FROM ubuntu:artful
 ## dependencies
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --force-yes -y -o Dpkg::Options::="--force-confnew" \
-    php7.1 php7.1-cli php7.1-mbstring php7.1-json python ca-certificates openssl build-essential \
+    php7.1 php7.1-cli php7.1-mbstring php7.1-json php7.1-xml python ca-certificates openssl build-essential \
     curl wget zip git apt-transport-https lsb-release sudo libfontconfig bzip2 && \
     curl -sL https://deb.nodesource.com/setup_8.x | bash - && sudo apt-get install -y nodejs && \
     curl --silent --show-error https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
