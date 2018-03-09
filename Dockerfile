@@ -17,7 +17,7 @@ RUN npm --no-color install && COMPOSER_NO_INTERACTION=1 npm --no-color run setup
 
 ## test 'n build just for shits 'n giggles
 ADD . /src
-RUN npm --no-color run lint && npm --no-color run test && npm --no-color run compile:pl
+RUN npm --no-color run lint && npm --no-color run test && npm --no-color run build:pl
 CMD npm --no-color start
 EXPOSE 8080
 
