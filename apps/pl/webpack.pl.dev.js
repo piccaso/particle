@@ -9,20 +9,16 @@ const path = require('path');
 const merge = require('webpack-merge');
 
 // Custom Imports
-const particle = require('../../webpack.particle.dev.js');
+const particle = require('../../webpack.particle.dev');
 const pl = require('./webpack.pl.shared');
 
 // Webpack Entry Points
 const dev = {
-  mode: 'development',
   devServer: {
     host: '0.0.0.0',
     port: '8080',
     contentBase: path.resolve('dist/'), // dev server starts from this folder.
     watchContentBase: true, // Refresh devServer when dist/ changes (Pattern Lab)
-    watchOptions: {
-      ignored: /(pl|assets)/, // This watches ONLY the root CHANGED.txt file for changes
-    },
     open: true, // Open browser immediately
     openPage: 'pl', // Open browser to the PL landing page so it's very clear where to go
     hot: true, // Inject css/js into page without full refresh
