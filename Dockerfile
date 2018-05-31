@@ -25,10 +25,8 @@ EXPOSE 8080
 ARG BUILD_DATE
 ARG VCS_REF
 ARG VERSION
-LABEL org.label-schema.build-date=$BUILD_DATE \
+LABEL \
     org.label-schema.name="particle" \
     org.label-schema.url="https://hub.docker.com/r/0xff/particle/" \
-    org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.vcs-url="https://github.com/piccaso/particle" \
-    org.label-schema.version=$VCS_REF \
     org.label-schema.schema-version="1.0"
